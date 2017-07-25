@@ -1,0 +1,22 @@
+<% content_for :top_content do %>
+  <div class="jumbotron">
+    <div class="container">
+      <header>
+        <% if user_signed_in? %>
+          <h1>Welcome to Fidiyo, <%= current_user.email %>!</h1>
+          <h2>We're using Rails <%= Rails.version %></h2>
+          <h1>Rails:<%= Rails.env %></h1>
+        <% else %>
+          <h1>Welcome to Fidiyo %>!</h1>
+          <p>Register to get started.</p>
+          <p>
+            <%= link_to 'Register', new_user_registration_path, class: 'btn btn-primary btn-lg' %>
+          </p>
+        <% end %>
+      </header>
+    </div>
+  </div>
+<% end %>
+<section>
+  <p>Future home of Fidiyo's Dashboard</p>
+</section>
