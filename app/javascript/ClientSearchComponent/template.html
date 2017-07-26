@@ -1,0 +1,55 @@
+<header>
+  <h1 class="h2">Client Search</h1>
+</header>
+<section class="search-form">
+  <form>
+    <label for="keywords" class="sr-only">Keywords></label>
+    <input type="text" id="keywords" name="keywords"
+      placeholder="Name, Contact, or Email Address"
+      bind-ngModel="keywords"
+      on-ngModelChange="search($event)"
+      class="form-control input-lg">
+  </form>
+</section>
+<section class="search-results" *ngIf="clients">
+  <header>
+    <h1 class="h3">Results</h1>
+  </header>
+  <nav>
+    <ul class="pager">
+      <li *ngIf="page > 0" class="previous">
+        <a (click)="decrement_page()">&larr; Previous</a>
+      </li>
+      <li *ngIf="clients != null && clients.length >= page_size" class="next">
+        <a (click)="increment_page()">Next &rarr;</a>
+      </li>
+    </ul>
+  </nav>
+  <ol class="list-group">
+    <li *ngFor="let client of clients" class="list-group-item clearfix">
+      <h3 class="pull-right"><small class="text-uppercase">Joined</small> {{client.created_at}} {{ client.status }}</h3>
+      <h2>
+        {{client.name}}
+        <small>{{client.username}}</small>
+      </h2>
+      <h4 class="pull-right">{{client.email}} {{client.phone}}</h4>
+      <h3>Contact {{client.main_contact}}</h3>
+      <div class="pull-right">
+        <button class="btn btn-small btn-primary" on-click="viewDetails(client)">
+          View Details...
+        </button>
+      </div>
+      <h5>{{client.logo}}</h5>
+    </li>
+  </ol>
+  <nav>
+    <ul class="pager">
+      <li *ngIf="page > 0" class="previous">
+        <a (click)="decrement_page()">&larr; Previous</a>
+      </li>
+      <li *ngIf="clients != null && clients.length >= page_size" class="next">
+        <a (click)="increment_page()">Next &rarr;</a>
+      </li>
+    </ul>
+  </nav>
+</section>

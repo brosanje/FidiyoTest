@@ -98,6 +98,7 @@ end
 
 group :development, :test do
   # test framework, api similar to jasmine
+  # don't forget to bundle exec rails g rspec:install
   gem "rspec-rails"
 
   # better error pages for rails
@@ -157,7 +158,8 @@ group :development, :test do
   gem 'capistrano-passenger' # restart app
   gem 'capistrano-figaro-yml' # deploy secrets
   
-  gem "selenium-webdriver" # ruby bindings for Selenium WebDriver
+  #gem "selenium-webdriver" # ruby bindings for Selenium WebDriver
+  gem "poltergeist", :group => :test
 
   # test rake tasks in RSpec
   #gem 'fantaskspec'

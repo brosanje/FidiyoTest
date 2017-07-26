@@ -1,5 +1,12 @@
 class ClientsController < ApplicationController
+  before_action :authenticate_user!
+
   PAGE_SIZE = 10
+
+  def ng
+    @base_url = '/clients/ng'
+    render :index
+  end
 
   def index
     @page = (params[:page] || 0).to_i
@@ -18,10 +25,19 @@ class ClientsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { }
+      format.html {
+        redirect_to clients_ng_path
+      }
       format.json {
         render json: { clients: @clients }
       }
+    end
+  end
+
+  def show
+    client = Client.find(params[:id])
+    respond_to do |format|
+      format.json { render json: { client: client } }
     end
   end
 end

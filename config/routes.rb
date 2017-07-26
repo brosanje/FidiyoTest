@@ -3,5 +3,12 @@ Rails.application.routes.draw do
   devise_for :users
 
   root to: 'dashboard#index'
-  resources :clients, only: [ :index ]
+
+  resources :dashboard, only: [ :index ]
+  resources :home, only: [ :index ]
+
+  get "clients/ng", to: "clients#ng"
+  get "clients/ng/*angular_route", to: "clients#ng"
+
+  resources :clients, only: [ :index, :show ]
 end
