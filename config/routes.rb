@@ -4,11 +4,18 @@ Rails.application.routes.draw do
 
   root to: 'dashboard#index'
 
-  resources :dashboard, only: [ :index ]
-  resources :home, only: [ :index ]
-
+  resources :clients, only: [ :index, :show ]
   get "clients/ng", to: "clients#ng"
   get "clients/ng/*angular_route", to: "clients#ng"
 
-  resources :clients, only: [ :index, :show ]
+  resources :dashboard, only: [ :index ]
+  get "dashboard/ng", to: "dashboard#ng"
+  get "dashboard/ng/*angular_route", to: "dashboard#ng"
+
+  resources :services, only: [ :index, :show ]
+  get "services/showVideoLibrary", to: "services#showVideoLibrary"
+
+  #get 'services/index'
+  #get 'services/show'
+  #get 'services/showVideoLibrary'
 end

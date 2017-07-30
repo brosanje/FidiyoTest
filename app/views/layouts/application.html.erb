@@ -8,6 +8,7 @@
     <%= javascript_include_tag  'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag     "application", 'data-turbolinks-eval': false %>
     <%= stylesheet_pack_tag     "application" %>
+	<%= yield(:head) %>
     <% if @base_url %>
       <base href="<%= @base_url %>">
     <% end %>

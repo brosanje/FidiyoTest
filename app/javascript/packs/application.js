@@ -11,4 +11,7 @@ import "./application.css";
 // import "jquery/dist/jquery.js"
 // import "bootstrap/dist/js/bootstrap.js"
 
+import "core-js/client/shim.min.js"
+import "reflect-metadata/Reflect.js"
+
 console.log('Hello World from Weby Webpacker')

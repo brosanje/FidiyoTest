@@ -7,7 +7,7 @@
           <h2>We're using Rails <%= Rails.version %></h2>
           <h1>Rails:<%= Rails.env %></h1>
         <% else %>
-          <h1>Welcome to Fidiyo %>!</h1>
+          <h1>Welcome to Fidiyo!</h1>
           <p>Register to get started.</p>
           <p>
             <%= link_to 'Register', new_user_registration_path, class: 'btn btn-primary btn-lg' %>
@@ -17,6 +17,14 @@
     </div>
   </div>
 <% end %>
-<section>
-  <p>Future home of Fidiyo's Dashboard</p>
-</section>
+<!--use for single page js files that are precompiled. will load them into head. if use yield :head -->
+
+<% content_for :head do %>
+  <%= javascript_include_tag 'main', 'id': 'jsmain'%>
+<% end %>
+<% if user_signed_in? %>
+  <section>
+    <view></view>
+  </section>
+<%= javascript_pack_tag "hub" %>
+<% end %>

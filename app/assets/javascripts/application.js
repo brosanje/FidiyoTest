@@ -17,4 +17,4 @@
 //= require bootstrap/dropdown
 //= require turbolinks
 //= require global
-//= require_tree .
+//= require_tree ./sitewide
