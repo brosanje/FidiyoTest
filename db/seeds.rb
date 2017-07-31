@@ -8,29 +8,99 @@
 
 #require 'ffaker'
 
-track = Hash.new
+case Rails.env
+when "development"
+  $stderr.puts "Seeding for rails #{Rails.env}"
+  track = Hash.new
 
-50_000.times do |ii|
-  username = Faker::Internet.user_name
-  if track.has_key?(username)
-    track[username] += 1
-    username += ii.to_s
+  Client.delete_all
+  50_000.times do |ii|
+    username = Faker::Internet.user_name
+    if track.has_key?(username)
+      track[username] += 1
+      username += ii.to_s
+    else
+      track[username] = 1
+    end
+
+    Client.create!(
+      username: username,
+      email: "#{Faker::Internet.user_name}#{ii}@#{Faker::Internet.domain_name}",
+      name: Faker::Company.name,
+      logo: Faker::HitchhikersGuideToTheGalaxy.quote,
+      main_contact: Faker::Name.name,
+      address: "#{Faker::Address.street_name}, #{Faker::Address.secondary_address}, #{Faker::Address.city}, #{Faker::Address.state_abbr}, #{Faker::Address.country}, #{Faker::Address.postcode}",
+      phone: Faker::PhoneNumber.cell_phone,
+      status: Faker::Color.color_name,
+    )
+
+    print '.' if ii % 1000 == 0
+  end
+  puts
+
+  uu = User.find_by_email('sok@hell.com')
+  if uu
+    $stderr.puts "user sok already defined"
   else
-    track[username] = 1
+    $stderr.puts "seeding user sok"
+    uu = User.new({name: "saint of killers", email: 'sok@hell.com', password: "tummyache", password_confirmation: "tummyache"})
+    uu.skip_confirmation!
+    uu.save
   end
 
-  Client.create!(
-    username: username,
-    email: "#{Faker::Internet.user_name}#{ii}@#{Faker::Internet.domain_name}",
-    name: Faker::Company.name,
-    logo: Faker::HitchhikersGuideToTheGalaxy.quote,
-    main_contact: Faker::Name.name,
-    address: "#{Faker::Address.street_name}, #{Faker::Address.secondary_address}, #{Faker::Address.city}, #{Faker::Address.state_abbr}, #{Faker::Address.country}, #{Faker::Address.postcode}",
-    phone: Faker::PhoneNumber.cell_phone,
-    status: Faker::Color.color_name,
-  )
+  vc = VideoCategory.find_by(:category => "any")
+  if vc
+    $stderr.puts "Video Category any already defined"
+  else
+    $stderr.puts "seeding video category any"
+    VideoCategory.create({:category=>"any", :description => "General Video Category"})
+  end
 
-  print '.' if ii % 1000 == 0
+  bs = VideoCloud.find_by(:backing_store => "local")
+  if bs
+    $stderr.puts "Video Backing Store local already defined"
+  else
+    $stderr.puts "seeding video backing store local"
+    VideoCloud.create({:backing_store => "local", :description => "Stored on local server", :access => "path/to/base/folder"}) unless bs
+  end
+
+when "test"
+  $stderr.puts "Seeding for rails #{Rails.env}"
+
+  vc = VideoCategory.find_by(:category => "any")
+  if vc
+    $stderr.puts "Video Category any already defined"
+  else
+    $stderr.puts "seeding video category any"
+    VideoCategory.create({:category=>"any", :description => "General Video Category"})
+  end
+
+  bs = VideoCloud.find_by(:backing_store => "local")
+  if bs
+    $stderr.puts "Video Backing Store local already defined"
+  else
+    $stderr.puts "seeding video backing store local"
+    VideoCloud.create({:backing_store => "local", :description => "Stored on local server", :access => "path/to/base/folder"}) unless bs
+  end
+
+when "production"
+  $stderr.puts "Seeding for rails #{Rails.env}"
+
+  vc = VideoCategory.find_by(:category => "any")
+  if vc
+    $stderr.puts "Video Category any already defined"
+  else
+    $stderr.puts "seeding video category any"
+    VideoCategory.create({:category=>"any", :description => "General Video Category"})
+  end
+
+  bs = VideoCloud.find_by(:backing_store => "local")
+  if bs
+    $stderr.puts "Video Backing Store local already defined"
+  else
+    $stderr.puts "seeding video backing store local"
+    VideoCloud.create({:backing_store => "local", :description => "Stored on local server", :access => "path/to/base/folder"}) unless bs
+  end
+else
+  $stderr.puts "Rails.env unknown: #{Rails.env}, data seed failed." 
 end
-
-puts
