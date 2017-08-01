@@ -1,4 +1,5 @@
 'use strict';
+
 var gumVideo = document.querySelector('video#gum');
 var recordedVideo = document.querySelector('video#recorded');
 var imageCapture = document.querySelector('canvas#canvas');
@@ -181,19 +182,21 @@ function download() {
 }
 
 function send() {
-
   var xhr = new XMLHttpRequest();
   var videoData = new FormData();
-  if(recordedBlobs){console.log('recordedblobs exists');var sendblob = new Blob(recordedBlobs, {type: 'video/webm'});
-  videoData.append('video', sendblob);
-  videoData.append('description', 'a random description of a completely normal video by user john');
-}
+  if(recordedBlobs) {
+    var rails_csrf_authenticity_token = document.querySelector("view").getAttribute("authenticity_token");
+    console.log('recordedblobs exists');var sendblob = new Blob(recordedBlobs, {type: 'video/webm'});
+    videoData.append('video', sendblob);
+    videoData.append('description', 'a random description of a completely normal video by user john');
+    videoData.append('authenticity_token', rails_csrf_authenticity_token);
+  }
 
   if(image_captured){
     console.log('captured image had an src.');
     videoData.append('image', image.src);
+  }
 
-}
   xhr.open("POST", '../videos', true);
   xhr.onreadystatechange = function() {
       if(xhr.readyState == 4 && xhr.status == 200) {
