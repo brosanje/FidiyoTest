@@ -1,0 +1,56 @@
+<p id="notice"><%= notice %></p>
+
+<header>
+  <h1 class="h2">Video Search</h1>
+</header>
+
+<section class="search-form">
+  <%= form_for :videos, method: :get do |ff| %>
+    <div class="input-group input-group-lg">
+      <%= label_tag :keywords, nil, class: "sr-only" %>
+      <%= text_field_tag :keywords, nil, placeholder: "description", class: "form-control input-lg" %>
+      <span class="input-group-btn">
+        <%= submit_tag "Find Videos", class: "btn btn-primary btn-lg" %>
+      </span>
+    </div>
+  <% end %>
+</section>
+
+
+<section class="search-results">
+  <header>
+    <h1 class="h3">Results</h1>
+  </header>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Resource Path</th>
+        <th>Category</th>
+        <th>Backing</th>
+        <th>Created</th>
+        <th>Show</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @videos.each do |video| %>
+        <tr>
+          <td><%= video.description %></td>
+          <td><%= video.resource_path %></td>
+          <td><%= video.video_category.description %></td>
+          <td><%= video.video_cloud.description %></td>
+          <td><%= l video.created_at.to_date %></td>
+          <td><%= link_to 'Show', video %></td>
+          <td><%= link_to 'Edit', edit_video_path(video) %></td>
+          <td><%= link_to 'Destroy', video, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<br>
+
+<%= link_to 'New Video', new_video_path %>

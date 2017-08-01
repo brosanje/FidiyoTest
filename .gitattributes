@@ -1,0 +1,12 @@
+* text=auto
+
+*.rb text
+*.ts text
+*.js text
+*.coffee text
+*.erb text
+*.html text
+
+*.png binary
+*.jpg binary
+*.webm binary

@@ -15,6 +15,11 @@ Rails.application.routes.draw do
   resources :services, only: [ :index, :show ]
   get "services/showVideoLibrary", to: "services#showVideoLibrary"
 
+  post "server/SaveVideo.php", to: "services#saveVideo", format: :text
+  get "server/videoLibrary", to: "services#showVideoLibrary"
+
+  resources :videos, :photos
+
   #get 'services/index'
   #get 'services/show'
   #get 'services/showVideoLibrary'
