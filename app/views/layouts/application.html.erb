@@ -14,29 +14,33 @@
     <% end %>
   </head>
 
-  <body class="container">
-    <nav class="navbar navbar-inverse">
+  <body class="fluid-container" style = "height: 100%; min-height: 480px; position: relative;">
       <div class="container">
-        <div class="navbar-header">
-          <%= link_to 'Fidiyo', root_path, class: 'navbar-brand' %>
+        <div class="well row">
+		<div class = "col-xs-2 center">
+		<span class="glyphicon glyphicon-home" />
+			<%= link_to 'Fidiyo', root_path, class: 'btn-sm btn-primary'  %> <!--<span class="glyphicon glyphicon-home" /> -->
         </div>
-        <div id="navbar">
-          <ul class="nav navbar-nav">
+		  <div class = "col-xs-1 col-xs-offset-3 " ><img src = "http://localhost/dashboard/bmo/cr.png" height="40px" width="90px"></div>
+        
+          <!-- 
+		  <ul class="nav navbar-nav">
             <li><%= link_to 'Home', root_path %></li>
           </ul>
-
-          <ul class="nav navbar-nav pull-right">
+		  -->
+	
+          <div  class="col-xs-2 col-xs-offset-4 btn-group center">
             <% if user_signed_in? %>
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">
+              <button class="btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+			  <span class="glyphicon glyphicon-user"></span>
                   <%= current_user.name %>
                   <span class="caret"></span>
-                </a>
+                </button>
                 <ul class="dropdown-menu" role="menu">
                   <li><%= link_to 'Profile', edit_user_registration_path %></li>
                   <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
                 </ul>
-              </li>
+            
             <% else %>
               <li><%= link_to 'Log In', new_user_session_path %></li>
               <li><%= link_to 'Sign Up', new_user_registration_path %></li>
@@ -44,7 +48,8 @@
           </ul>
         </div>
       </div>
-    </nav>
+    </div>
+
 
     <div class="container">
       <% flash.each do |key, value| %>

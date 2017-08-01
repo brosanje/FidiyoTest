@@ -89,32 +89,42 @@ loadScript(name: string, attempt: boolean, index: number) {
   providers: [ScriptService],
  selector: 'record',
  template: `
- <ng-template #record>
- <div id = "dashboard" *ngIf = 'refresh_switch'>
- <button id='exit' (click)="toHome()" >Exit</button>
- <button id='logout' (click)="logout()" >Logout</button>
-  <div id='main' align='center' >
-  <div id='container'>
-    <h1>powered by fidiyo</h1>
-    <video muted id='gum' autoplay hidden></video>
-    <video  id='recorded' autoplay loop hidden></video>
-    <canvas id='canvas' style='display:none;'></canvas>
-    <img id = 'captured' src =''>
-    <div>
-      <button id='record' disabled>Start Recording</button>
-      <button id='capture' disabled>Take a Picture</button>
-      <button id='play' disabled>Review</button>
-      <button id='download' disabled>Save file</button>
-      <button id='saveimg' disabled>Save Image</button>
-      <button id='send' disabled>Send file</button>
-    </div>
-  </div>
-  </div>
-  </div>
- </ng-template>
+ <template #record>
+  <div class = "container" id='container'>
+ <button class = "btn btn-primary" id='exit' (click)="toHome()" >Exit</button>
+    <h1 class = "text-center">powered by fidiyo</h1>
+    <video class = "center-block"   id='gum' autoplay ></video>
+    <video class = "center-block" style="display:none;" id='recorded'   ></video>
+    <canvas class = "center-block"  style="display:none;" id='canvas'></canvas>
+    <img class = "center-block"  style="display:none;" id = 'captured' src ='' >
 
- <ng-template #send>
- </ng-template>
+    <progress class = "center-block" style="background-color:grey;display:none;" id="videostream" ></progress><div class = "text-center" id = "duration"></div>
+<div style="margin-top:1%; min-margin-top:10px;">
+<div class = "nav navbar-inverse" style="border-radius:3px; postion: relative;">
+
+  <div class="btn-group " style="max-margin-left:5px; margin-left:1em;">
+      <button #recordButton (click) = "toggleselect(recordButton)" class = "btn btn-primary navbar-btn" id='record' disabled><span class="glyphicon glyphicon-facetime-video"></span> Start Recording</button>
+      <button class = "btn btn-primary navbar-btn" id='capture' disabled><span class="glyphicon glyphicon-camera"></span> Take a Picture</button>
+  </div>
+  <div class="btn-group mx-auto" style="position:absolute;
+    left: 50%;
+    transform: translateX(-50%);">
+  <button #playButton class = "btn btn-primary navbar-btn" id='play' disabled><span class="glyphicon glyphicon-play-circle"></span> Play</button>
+  <button #flipButton class = "btn btn-primary navbar-btn" id='flip'> <span class="glyphicon glyphicon-refresh"></span> </button>
+  <button #pauseButton class = "btn btn-primary navbar-btn" id='pause' disabled><span class="glyphicon glyphicon-pause"></span> Pause</button>
+</div>
+      <div class = "btn-group pull-right"  style="max-margin-right:5px; margin-right:1em;">
+      <button  class = "btn btn-primary navbar-btn" id='download' disabled><span class="glyphicon glyphicon-download-alt"></span> Save Video</button>
+      <button  class = "btn btn-primary navbar-btn " id='saveimg' disabled><span class="glyphicon glyphicon-download-alt"></span> Save Image</button>
+      <button  class = "btn btn-primary navbar-btn" id='send' disabled><span class="glyphicon glyphicon-upload"></span> Send file</button>
+      </div>
+      </div>
+    </div>
+    </div>
+ </template>
+
+ <template #send>
+ </template>
 `
 })
 export class record {
@@ -125,6 +135,7 @@ export class record {
   constructor( public http: Http, public script: ScriptService, private vcRef: ViewContainerRef, private router: Router) {
     this.refresh_switch = true;
     this.status = 'record';
+
   }
   ngOnInit(){
    this.vcRef.clear();
@@ -158,6 +169,17 @@ export class record {
     });
   }
   toHome(){
-    this.router.navigate(['']);
+    this.router.navigate(['/dashboard']);
+  }
+  toggleselect(domElement: any){
+    if(domElement.classList.contains('btn-primary')){
+      domElement.classList.remove('btn-primary');
+      domElement.classList.add('btn-danger');
+    }
+    else if(domElement.classList.contains('btn-danger')){
+      domElement.classList.remove('btn-danger');
+      domElement.classList.add('btn-primary');
+    }
+
   }
 }

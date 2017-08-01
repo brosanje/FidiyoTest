@@ -13,19 +13,32 @@ import { RouterModule, Routes, Router } from '@angular/router';
  selector: 'dashboard',
  template: `
 <template #library>
+
 <button (click)="toHome()"> back </button>
-<table>
+<div *ngIf = "reviewVideo" class = "jumbotron">
+<video  src = "activeVideo.url"></video>
+<button (click)="toggleselect(activeVideo)" class = "btn btn-primary btn-block"><td >Video: {{ video.url }}</td> <td> {{ video.path }} </td> <td> {{video.time}}</td></button>
+</div>
+<table *ngIf = "browseLibrary">
   <tr *ngFor="let video of videos"  >
-    <button (click)="toggleselect(video)" [style.background-color] = "video.color" ><td >Video: {{ video.url }}</td> <td> {{ video.path }} </td> <td> {{video.time}}</td></button>
+    <button (click)="toggleselect(video)" class = "btn btn-primary btn-block"><td >Video: {{ video.url }}</td> <td> {{ video.path }} </td> <td> {{video.time}}</td></button>
   </tr>
 </table>
 <button (click)="sendVideos()">send</button>
 </template>
 <!-- Home Screen Record Browse Admin -->
 <template #home>
-<button id = "Browse" (click) = "browseLibrary()">Browse Video Library</button>
-<button id = "Record" (click) = "startRecording()">Record</button>
-<button id = "Reset" (click)="logout()">Logout</button>
+<img [src] = "profilepic" height = "190" width = "250" class = "center-block img-rounded">
+<p class = "  text-center"><span class="glyphicon glyphicon-envelope"></span> Send an existing file. </p>
+<p class = " text-center"><span class=" 	glyphicon glyphicon-camera"></span> Take a video/picture</p>
+<div class = "fluid-container" style = " position: absolute; bottom:0px; width: 100%;">
+<div class = "nav navbar-inverse container">
+<ul class = "nav navbar-nav"><li><a id = "Browse" (click) = "browseLibrary()" style="cursor: pointer;">
+<span class="glyphicon glyphicon-envelope"></span> Send Video</a></li></ul> <!--Browse Video Library -->
+<ul class = "nav navbar-nav pull-right"><li><a id = "Record" (click) = "startRecording()" style="cursor: pointer;"> <span class=" 	glyphicon glyphicon-camera"></span> Record</a></li>
+</ul>
+</div>
+</div>
 </template>
 
 <template #send>
@@ -42,14 +55,24 @@ import { RouterModule, Routes, Router } from '@angular/router';
    videos: Array<any>;
    videostoSend: Array<any>;
    refresh_switch: boolean;
+   profilepic: string;
+   playsrc: string;
+   reviewVideo: boolean;
+   browseLibrary: boolean;
+   activeVideo: any;
+
    constructor( public http: Http, private vcRef: ViewContainerRef, private router: Router) {
      this.refresh_switch = true;
+     this.reviewVideo = false;
+     this.browseLibrary = true;
      this.videos = [];
      this.videostoSend = [];
+     this.profilepic = document.querySelector('view').getAttribute('profilepic'); //will not take information from the templated page unless forced.
    }
    ngOnInit(){
     this.vcRef.clear();
     this.vcRef.createEmbeddedView(this.displayHome);
+
    }
    startRecording(){
      this.router.navigate(['/record']);
@@ -65,7 +88,26 @@ import { RouterModule, Routes, Router } from '@angular/router';
      //console.log(video);
      video.isSelect = !video.isSelect;
     //   console.log(video);
-     video.isSelect? video.color = "yellow": video.color = ""
+
+    if(video.classList.contains('btn-primary')){
+      video.classList.remove('btn-primary');
+      video.classList.add('btn-danger');
+    }
+    else if(video.classList.contains('btn-danger')){
+      video.classList.remove('btn-danger');
+      video.classList.add('btn-primary');
+    }
+
+    if(video.isSelect) {
+      this.browseLibrary = false;
+       this.reviewVideo = true;
+       this.activeVideo = video;
+       video.isSelect = !video.isSelect;
+     } else {
+      this.reviewVideo = false;
+       this.browseLibrary = true;
+      }
+
     //   console.log(video);
    }
 
