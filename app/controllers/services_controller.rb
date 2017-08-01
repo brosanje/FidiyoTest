@@ -14,9 +14,13 @@ class ServicesController < ApplicationController
   @@allowed_mime_types = Hash["video/mp4 video/webm audio/mp3 audio/wma image/jpeg image/png image/gif image/webp".split.collect { |vv| [vv,1] }]
 
   def saveVideo
-    uploaded_io = params[:video]
-    name = uploaded_io.original_filename
-    mime_type = uploaded_io.content_type
+    uploaded_hash = params[:video] ## ActionDispatch::Http::UploadedFile - stupid video[video]
+    uploaded_actiondispatch = uploaded_hash ## ["video"]
+
+    description = params[:description]
+    name = uploaded_actiondispatch.original_filename
+    mime_type = uploaded_actiondispatch.content_type
+    uploaded_io = uploaded_actiondispatch.tempfile
 
     @user = current_user
 
@@ -33,8 +37,8 @@ class ServicesController < ApplicationController
         @saveVideo.extension = File.extname(name)
         @saveVideo.mime_type = mime_type
         @saveVideo.file_size = uploaded_io.length
-        @saveVideo.saved_basename = sprintf("client%03d-user%06d-%s-yyyymmddhhmmss-%s", 1, @user.id, @user.email, Time.now.strftime("%Y%m%d%H%M%S"), @saveVideo.basename).gsub(/\s/, "")
-        @saveVideo.saved_filename = Rails.root.join(vc.access, @saveVideo.saved_basename)
+        @saveVideo.saved_basename = sprintf("client%03d-user%06d-%s-%s-%s", 1, @user.id, @user.email, Time.now.strftime("%Y%m%d%H%M%S"), @saveVideo.basename).gsub(/\s/, "")
+        @saveVideo.saved_filename = Rails.root.join(bs.access, @saveVideo.saved_basename)
 
         case uploaded_io
         when StringIO
@@ -44,7 +48,7 @@ class ServicesController < ApplicationController
           @saveVideo.tempfile = uploaded_io.path
 
           ## client001-user999999-useremail-yyyymmddhhmmss-filename
-          FileUtils.move(uploaded_io.path, @saveVideo.saved_filename));
+          FileUtils.move(uploaded_io.path, @saveVideo.saved_filename);
           ##uploaded_io.unlink
 
 =begin
@@ -62,7 +66,7 @@ class ServicesController < ApplicationController
           end
 =end
 
-          Video.create({:isSelect => false, :color => "none", :user => @user, :description => "no description", :resource_path => @saveVideo.saved_basename})
+          @video = Video.create({:isSelect => false, :color => "none", :user => @user, :description => description, :resource_path => @saveVideo.saved_basename, :video_cloud => bs, :video_category => vc })
         else
           @saveVideo.error = "unknown class for uploaded_io: #{uploaded_io.class.to_s}"
         end
@@ -87,8 +91,12 @@ class ServicesController < ApplicationController
 MESSAGE
           end
       }
-      format.text {
-        render json: { clients: @clients }
+
+      format.html {
+      }
+
+      format.json {
+        render json: { video: @video }
       }
     end
   end

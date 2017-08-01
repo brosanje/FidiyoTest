@@ -1,4 +1,5 @@
-<%= form_with(model: video, local: true) do |form| %>
+<div class="container">
+<%= form_tag(video, :method => :post, :multipart => true, :remote => false, :class => "form-horizontal") do %>
   <% if video.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(video.errors.count, "error") %> prohibited this video from being saved:</h2>
@@ -11,7 +12,20 @@
     </div>
   <% end %>
 
-  <div class="actions">
-    <%= form.submit %>
+  <div class="input-group input-group-lg">
+    <%= label_tag :description, nil, class: "col-sm-2" %>
+    <div class="col-sm-4">
+      <%= text_field_tag :description, nil, placeholder: "Enter a description of the video here", class: "form-control" %>
+    </div>
   </div>
+  <div class="input-group input-group-lg">
+    <%= label_tag :upload, "Video Upload", class: "col-sm-2" %>
+    <div class="col-sm-4">
+      <input type="file" name="video" accept="image/webm,video/mp4" class:="form-control" />
+    </div>
+  </div>
+  <span class="input-group-btn">
+    <%= submit_tag nil, class: "btn btn-primary btn-lg" %>
+  </span>
 <% end %>
+</div>

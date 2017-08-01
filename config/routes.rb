@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   get "services/showVideoLibrary", to: "services#showVideoLibrary"
 
   post "server/SaveVideo.php", to: "services#saveVideo", format: :text
+  post "server/SaveVideo", to: "services#saveVideo"
   get "server/videoLibrary", to: "services#showVideoLibrary"
+  get "server/sendVideoByEmail", to: "services#sendVideoByEmail"
 
   resources :videos, :photos
 

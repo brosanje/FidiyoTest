@@ -1,4 +1,28 @@
 <p id="notice"><%= notice %></p>
 
+<section class="video-details">
+  <video controls>
+    <source src="<%= video_path File.basename(@video.resource_path) %>" type="video/webm">
+    Your bowser is bad bad bad
+  </video>
+  <h2><%= @video.description %></h2>
+  <h3><%= @video.resource_path %></h3>
+  <h4><%= @video.video_category.description %></h4>
+  <h4><%= @video.video_cloud.description %></h4>
+  <h5>
+    <small class="text-uppercase">Created</small>
+    <%= l @video.created_at.to_date %></td>
+  </h5>
+  <% if @saveVideo %>
+  <h4>Save Details</h4>
+    Uploaded:   <%= @saveVideo.original_name %></p>
+    Mime Type:  <%= @saveVideo.mime_type %></p>
+    Extension:  <%= @saveVideo.extension %></p>
+    Size:       <%= @saveVideo.file_size %></p>
+    Temp Path:  <%= @saveVideo.tempfile %></p>
+    Saved Path: <%= @saveVideo.saved_filename %></p>
+  <% end %>
+</section>
+
 <%= link_to 'Edit', edit_video_path(@video) %> |
 <%= link_to 'Back', videos_path %>
