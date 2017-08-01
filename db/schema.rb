@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724125058) do
+ActiveRecord::Schema.define(version: 20170730011806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,4 +60,57 @@ ActiveRecord::Schema.define(version: 20170724125058) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "video_categories", force: :cascade do |t|
+    t.string "type"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((description)::text) varchar_pattern_ops", name: "index_video_categories_on_lower_description_varchar_pattern_ops"
+    t.index ["type"], name: "index_video_categories_on_type", unique: true
+  end
+
+  create_table "video_clouds", force: :cascade do |t|
+    t.string "backing_store"
+    t.string "description"
+    t.string "access"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((description)::text) varchar_pattern_ops", name: "index_video_clouds_on_lower_description_varchar_pattern_ops"
+  end
+
+  create_table "video_distributions", force: :cascade do |t|
+    t.datetime "distributed_at"
+    t.string "link_url"
+    t.boolean "require_login"
+    t.boolean "expired"
+    t.integer "view_count_limit"
+    t.string "description"
+    t.bigint "video_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((description)::text) varchar_pattern_ops", name: "index_video_distribution_description_pattern"
+    t.index ["video_id"], name: "index_video_distributions_on_video_id"
+  end
+
+  create_table "videos", force: :cascade do |t|
+    t.string "resource_path"
+    t.boolean "isSelect"
+    t.string "color"
+    t.string "description"
+    t.bigint "users_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "video_category_id"
+    t.bigint "video_cloud_id"
+    t.index "lower((description)::text) varchar_pattern_ops", name: "index_videos_on_lower_description_varchar_pattern_ops"
+    t.index ["resource_path"], name: "index_videos_on_resource_path"
+    t.index ["users_id"], name: "index_videos_on_users_id"
+    t.index ["video_category_id"], name: "index_videos_on_video_category_id"
+    t.index ["video_cloud_id"], name: "index_videos_on_video_cloud_id"
+  end
+
+  add_foreign_key "video_distributions", "videos"
+  add_foreign_key "videos", "users", column: "users_id"
+  add_foreign_key "videos", "video_categories"
+  add_foreign_key "videos", "video_clouds"
 end
