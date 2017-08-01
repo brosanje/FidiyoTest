@@ -89,12 +89,13 @@ loadScript(name: string, attempt: boolean, index: number) {
   providers: [ScriptService],
  selector: 'record',
  template: `
- <template #record>
+  <div class = "container"><button class = "btn btn-primary" id='exit' (click)="toHome()" ><span class="glyphicon glyphicon-remove"></span> Exit</button></div>
+ <ng-template #record>
   <div class = "container" id='container'>
- <button class = "btn btn-primary" id='exit' (click)="toHome()" >Exit</button>
     <h1 class = "text-center">powered by fidiyo</h1>
     <video class = "center-block"   id='gum' autoplay ></video>
-    <video class = "center-block" style="display:none;" id='recorded'   ></video>
+    <!--depricate recorded dom object here-->
+    <video #recorded class = "center-block" style="display:none;" id='recorded'   ></video>
     <canvas class = "center-block"  style="display:none;" id='canvas'></canvas>
     <img class = "center-block"  style="display:none;" id = 'captured' src ='' >
 
@@ -115,16 +116,21 @@ loadScript(name: string, attempt: boolean, index: number) {
 </div>
       <div class = "btn-group pull-right"  style="max-margin-right:5px; margin-right:1em;">
       <button  class = "btn btn-primary navbar-btn" id='download' disabled><span class="glyphicon glyphicon-download-alt"></span> Save Video</button>
-      <button  class = "btn btn-primary navbar-btn " id='saveimg' disabled><span class="glyphicon glyphicon-download-alt"></span> Save Image</button>
-      <button  class = "btn btn-primary navbar-btn" id='send' disabled><span class="glyphicon glyphicon-upload"></span> Send file</button>
+      <button  class = "btn btn-primary navbar-btn " id='saveimg' disabled><span class="glyphicon glyphicon-download-alt"></span> Save Image</button><!--depricate gotemailForm(recorded.src)-->
+      <button  class = "btn btn-primary navbar-btn" id='send' disabled   (click) = "gotoemailForm(recorded.src)"><span class="glyphicon glyphicon-upload" ></span> Send file</button>
       </div>
       </div>
     </div>
     </div>
- </template>
+    
+ </ng-template>
 
- <template #send>
- </template>
+ <ng-template #send>
+
+ To: <input type = "email">
+ <button type = "submit" (click) = sendEmail()> Send Email</button>
+ Video: {{ videourl }}
+ </ng-template>
 `
 })
 export class record {
@@ -132,6 +138,7 @@ export class record {
   @ViewChild('send') displaySend: TemplateRef<any>;
   refresh_switch: boolean;
   status: string;
+  videourl: string;
   constructor( public http: Http, public script: ScriptService, private vcRef: ViewContainerRef, private router: Router) {
     this.refresh_switch = true;
     this.status = 'record';
@@ -141,6 +148,13 @@ export class record {
    this.vcRef.clear();
    this.vcRef.createEmbeddedView(this.displayRecord);
    this.script.load('mediarecorder', 'webrtcadapter').then(data => {console.log('script loaded ', data);}).catch(error => console.log(error));
+  }
+  gotoemailForm(vidurl: string){
+    console.log(vidurl);
+    //depricate
+    this.videourl = vidurl; //this is for testing. in final product vidurl will not be as here.
+    this.status = "send";
+    this.display();
   }
   display() {
     if (this.status === "record"){

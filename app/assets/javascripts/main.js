@@ -181,15 +181,20 @@ function download() {
 }
 
 function send() {
+
   var xhr = new XMLHttpRequest();
   var videoData = new FormData();
   if(recordedBlobs){console.log('recordedblobs exists');var sendblob = new Blob(recordedBlobs, {type: 'video/webm'});
-  videoData.append('video', sendblob);}
+  videoData.append('video', sendblob);
+  videoData.append('description', 'a random description of a completely normal video by user john');
+}
+
   if(image_captured){
     console.log('captured image had an src.');
     videoData.append('image', image.src);
+
 }
-  xhr.open("POST", 'server/SaveVideo.php', true);
+  xhr.open("POST", '../videos', true);
   xhr.onreadystatechange = function() {
       if(xhr.readyState == 4 && xhr.status == 200) {
           var return_data = xhr.response;
@@ -198,6 +203,7 @@ function send() {
   };
   xhr.send(videoData);
   console.log("processing...");
+
 //  window.location.href = "send.html";
 }
 function toggleRecording() {
