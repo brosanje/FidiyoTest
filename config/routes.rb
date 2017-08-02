@@ -4,6 +4,9 @@ Rails.application.routes.draw do
 
   root to: 'dashboard#index'
 
+  
+  get "admin", to: "admin#ng"
+
   get "clients/ng", to: "clients#ng"
   get "clients/ng/*angular_route", to: "clients#ng"
   resources :clients, only: [ :index, :show ]
